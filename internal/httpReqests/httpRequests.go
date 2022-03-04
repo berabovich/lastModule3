@@ -92,16 +92,6 @@ func HttpGetUsers(w http.ResponseWriter, _ *http.Request) {
 	_ = json.Unmarshal(rawDataIn, &userStorage)
 	_ = json.NewEncoder(w).Encode(userStorage)
 
-	//var response string
-	//for _, u := range user.Users {
-	//	response += u.ToString() + "\n"
-	//}
-	//_ = json.NewEncoder(w).Encode(user.Users)
-	//_, err = w.Write([]byte(response))
-	//if err != nil {
-	//	return
-	//}
-
 }
 
 func HttpCreateUser(w http.ResponseWriter, r *http.Request) {
@@ -150,11 +140,6 @@ func HttpCreateUser(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 
-	//_, err = w.Write([]byte("User ID: " + u.Id + " Status:" + strconv.Itoa(http.StatusCreated)))
-	//if err != nil {
-	//	return
-	//}
-	//id, _ := strconv.Atoi(u.Id)
 	_ = json.NewEncoder(w).Encode(us.Id)
 }
 
