@@ -1,6 +1,32 @@
 {
-  "id": "",
-  "name": "",
-  "age": "",
-  "friends": null
+  "Users": [
+    {
+      "id": "1",
+      "name": "Bill",
+      "age": "22",
+      "friends": [
+        "2"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "John",
+      "age": "21",
+      "friends": [
+        "1"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Bob",
+      "age": "27",
+      "friends": []
+    },
+    {
+      "id": "4",
+      "name": "John",
+      "age": "21",
+      "friends": []
+    }
+  ]
 }
