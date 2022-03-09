@@ -1,6 +1,11 @@
 package user
 
-//var Users []User
+import (
+	"encoding/json"
+	"net/http"
+	"sort"
+	"strconv"
+)
 
 type User struct {
 	Id      string   `json:"id" bson:"_id,omitempty"`
@@ -8,28 +13,42 @@ type User struct {
 	Age     string   `json:"age" bson:"Age"`
 	Friends []string `json:"friends" bson:"Friends"`
 }
+
+func (us *User) AddUserId(userStorage Storage) string {
+	us.Id = strconv.Itoa(len(userStorage.Users) + 1)
+	for i, u := range userStorage.Users {
+		if u.Id != strconv.Itoa(i+1) {
+			us.Id = strconv.Itoa(i + 1)
+			break
+		}
+	}
+	return us.Id
+}
+
 type Storage struct {
 	Users []User
 }
 
-//var Database *mongo.Database
+var Db Storage
 
-//func (u *User) FriendsToString() string {
-//	var friend []string
-//	var name string
-//	for _, fr := range u.Friends {
-//		for _, user := range Users {
-//			if user.Id == fr {
-//				name = user.Name
-//			}
-//		}
-//		friend = append(friend, name)
-//	}
-//
-//	friends := strings.Join(friend, ", ")
-//	return friends
-//}
-//
-//func (u *User) ToString() string {
-//	return fmt.Sprintf("id %s name %s age %s friends %s", u.Id, u.Name, u.Age, u.FriendsToString())
-//}
+func (s Storage) UpdateStorage(u User) Storage {
+	s.Users = append(s.Users, u)
+	sort.SliceStable(s.Users, func(i, j int) bool {
+		return s.Users[i].Id < s.Users[j].Id
+	})
+	return s
+}
+
+func (s Storage) GetFriends(params string, w http.ResponseWriter) {
+	for _, u := range s.Users {
+		if u.Id == params {
+			id, _ := strconv.Atoi(u.Id)
+			_ = json.NewEncoder(w).Encode(&s.Users[id-1].Friends)
+			return
+		}
+	}
+	_, err := w.Write([]byte("User not find"))
+	if err != nil {
+		return
+	}
+}
